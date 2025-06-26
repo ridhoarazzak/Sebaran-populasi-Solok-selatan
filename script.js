@@ -36,6 +36,31 @@ var hrsl = L.tileLayer(
   }
 ).addTo(map);
 
+fetch('https://raw.githubusercontent.com/ridhoarazzak/Sebaran-populasi-Solok-selatan/main/geojson_shp_desa.geojson')
+  .then(res => res.json())
+  .then(geojsonData => {
+    L.geoJSON(geojsonData, {
+      style: {
+        color: 'blue',
+        weight: 1,
+        fillOpacity: 0
+      },
+      onEachFeature: function (feature, layer) {
+        const nama = feature.properties.NAMOBJ || 'Nagari Tidak Diketahui';
+        const pop = feature.properties.pop_rendah?.toFixed(0) || '-';
+
+        // Tooltip → muncul saat hover
+        layer.bindTooltip(`${nama}: ${pop} jiwa`, {
+          sticky: true, // tetap menempel saat gerak mouse
+          direction: 'top'
+        });
+
+        // Popup → muncul saat diklik
+        layer.bindPopup(`<strong>${nama}</strong><br>Populasi Rendah: ${pop} jiwa`);
+      }
+    }).addTo(map);
+  });
+
 // Layer Control
 L.control.layers({ "OpenStreetMap": osm, "Esri": esri }, { "HRSL": hrsl }).addTo(map);
 
