@@ -56,7 +56,7 @@ Papa.parse('https://raw.githubusercontent.com/ridhoarazzak/Sebaran-populasi-Solo
               direction: 'top'
             });
 
-            layer.bindPopup(`<strong>${nama}</strong><br>Populasi Rendah: ${pop} jiwa`);
+            layer.bindPopup(`<strong>${nama}</strong><br>Jumlah Populasi: ${pop} jiwa`);
           }
         }).addTo(map);
       });
