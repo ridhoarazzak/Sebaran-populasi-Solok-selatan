@@ -64,8 +64,8 @@
 
   L.control.layers(baseMaps, overlayMaps, { collapsed: false }).addTo(map);
 
-  // Chart populasi dari CSV
-  Papa.parse('populasi.csv', {
+  // Chart populasi dari CSV (ambil langsung dari GitHub)
+  Papa.parse('https://raw.githubusercontent.com/ridhoarazzak/Sebaran-populasi-Solok-selatan/main/Populasi_Kategori_PerNagari.csv', {
     header: true,
     download: true,
     complete: function(results) {
@@ -107,4 +107,4 @@
 </script>
 
 </body>
-  </html>
+</html>
