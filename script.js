@@ -29,18 +29,21 @@ Papa.parse('https://raw.githubusercontent.com/ridhoarazzak/Sebaran-populasi-Solo
   complete: function(results) {
     const data = results.data;
 
-    // Ambil nama nagari dan nilai pop_rendah dari CSV
-    const labels = data.map(row => row.nagari).filter(x => x);
-    const popRendah = data.map(row => parseFloat(row.pop_rendah)).filter(x => !isNaN(x));
+    // Gunakan kolom NAMOBJ dan pop_rendah dari CSV hasil FeatureCollection
+    const validData = data.filter(row => row.NAMOBJ && !isNaN(parseFloat(row.pop_rendah)));
 
-    console.log('Populasi Rendah per Nagari:', popRendah);
+    const labels = validData.map(row => row.NAMOBJ.trim());
+    const popRendah = validData.map(row => parseFloat(row.pop_rendah));
+
+    console.log('Labels:', labels);
+    console.log('Populasi Rendah:', popRendah);
 
     new Chart(document.getElementById('chartPopulasi'), {
       type: 'bar',
       data: {
         labels: labels,
         datasets: [{
-          label: 'Populasi Kategori Rendah',
+          label: 'Populasi Kategori Rendah per Nagari',
           data: popRendah,
           backgroundColor: 'rgba(255, 99, 132, 0.6)',
           borderColor: 'rgba(255, 99, 132, 1)',
@@ -51,8 +54,19 @@ Papa.parse('https://raw.githubusercontent.com/ridhoarazzak/Sebaran-populasi-Solo
         responsive: true,
         indexAxis: 'y',
         scales: {
-          x: { title: { display: true, text: 'Jumlah Jiwa (Kategori Rendah)' }},
-          y: { ticks: { autoSkip: false } }
+          x: {
+            title: {
+              display: true,
+              text: 'Jumlah Jiwa'
+            }
+          },
+          y: {
+            ticks: { autoSkip: false },
+            title: {
+              display: true,
+              text: 'Nagari'
+            }
+          }
         }
       }
     });
