@@ -19,92 +19,13 @@
   <canvas id="chartPopulasi" width="400" height="300"></canvas>
 </div>
 
-<!-- Libraries -->
+<!-- Library -->
 <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.3.2/papaparse.min.js"></script>
 
-<script>
-  // Inisialisasi peta
-  var map = L.map('map').setView([-1.55, 101.3], 10);
-
-  // Basemap 1: OpenStreetMap
-  var osm = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-    attribution: '© OpenStreetMap contributors'
-  });
-
-  // Basemap 2: Esri World Imagery
-  var esri = L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/' +
-    'World_Imagery/MapServer/tile/{z}/{y}/{x}', {
-    attribution: 'Tiles © Esri'
-  });
-
-  // Tile HRSL dari Earth Engine
-  var hrslTile = L.tileLayer(
-    'https://earthengine.googleapis.com/v1/projects/ee-mrgridhoarazzak/maps/64010df46c311212d54025fecb61d2e1-53d18af144c6d5806bc3bb5ed7634ee7/tiles/{z}/{x}/{y}',
-    {
-      attribution: '© HRSL Facebook / Earth Engine',
-      opacity: 0.6
-    }
-  );
-
-  // Tambahkan layer default
-  osm.addTo(map);
-  hrslTile.addTo(map);
-
-  // Layer control
-  var baseMaps = {
-    "OpenStreetMap": osm,
-    "Esri World Imagery": esri
-  };
-
-  var overlayMaps = {
-    "Sebaran Populasi HRSL": hrslTile
-  };
-
-  L.control.layers(baseMaps, overlayMaps, { collapsed: false }).addTo(map);
-
-  // Chart populasi dari CSV (ambil langsung dari GitHub)
-  Papa.parse('https://raw.githubusercontent.com/ridhoarazzak/Sebaran-populasi-Solok-selatan/main/Populasi_Kategori_PerNagari.csv', {
-    header: true,
-    download: true,
-    complete: function(results) {
-      const data = results.data;
-
-      const labels = data.map(row => row.nagari || row.nama_nagari).filter(x => x);
-      const total = data.map(row => parseFloat(row.total_pop || 0)).filter(x => !isNaN(x));
-
-      new Chart(document.getElementById('chartPopulasi'), {
-        type: 'bar',
-        data: {
-          labels: labels,
-          datasets: [{
-            label: 'Total Populasi',
-            data: total,
-            backgroundColor: 'rgba(75, 192, 192, 0.6)',
-            borderColor: 'rgba(75, 192, 192, 1)',
-            borderWidth: 1
-          }]
-        },
-        options: {
-          responsive: true,
-          indexAxis: 'y',
-          plugins: {
-            legend: { display: false }
-          },
-          scales: {
-            x: {
-              title: { display: true, text: 'Jumlah Penduduk (jiwa)' }
-            },
-            y: {
-              ticks: { autoSkip: false }
-            }
-          }
-        }
-      });
-    }
-  });
-</script>
+<!-- Panggil file script.js -->
+<script src="script.js"></script>
 
 </body>
 </html>
