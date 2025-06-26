@@ -28,28 +28,31 @@ Papa.parse('https://raw.githubusercontent.com/ridhoarazzak/Sebaran-populasi-Solo
   download: true,
   complete: function(results) {
     const data = results.data;
-    const labels = data.map(row => row.nagari || row.nama_nagari).filter(Boolean);
-    const total = data.map(row => parseFloat(row.total_pop || 0)).filter(n => !isNaN(n));
+
+    // Ambil nama nagari dan nilai pop_rendah dari CSV
+    const labels = data.map(row => row.nagari).filter(x => x);
+    const popRendah = data.map(row => parseFloat(row.pop_rendah)).filter(x => !isNaN(x));
+
+    console.log('Populasi Rendah per Nagari:', popRendah);
 
     new Chart(document.getElementById('chartPopulasi'), {
       type: 'bar',
       data: {
         labels: labels,
         datasets: [{
-          label: 'Total Populasi',
-          data: total,
-          backgroundColor: 'rgba(54, 162, 235, 0.6)',
-          borderColor: 'rgba(54, 162, 235, 1)',
+          label: 'Populasi Kategori Rendah',
+          data: popRendah,
+          backgroundColor: 'rgba(255, 99, 132, 0.6)',
+          borderColor: 'rgba(255, 99, 132, 1)',
           borderWidth: 1
         }]
       },
       options: {
         responsive: true,
         indexAxis: 'y',
-        plugins: { legend: { display: false } },
         scales: {
-          x: { title: { display: true, text: 'Populasi (jiwa)' }},
-          y: { ticks: { autoSkip: false }}
+          x: { title: { display: true, text: 'Jumlah Jiwa (Kategori Rendah)' }},
+          y: { ticks: { autoSkip: false } }
         }
       }
     });
