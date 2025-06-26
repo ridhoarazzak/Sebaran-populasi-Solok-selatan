@@ -10,6 +10,23 @@ var esri = L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/Wor
 });
 osm.addTo(map);
 
+// Tambahkan layer batas desa dari GeoJSON
+fetch('https://raw.githubusercontent.com/ridhoarazzak/Sebaran-populasi-Solok-selatan/main/geojson_shp_desa.geojson')
+  .then(res => res.json())
+  .then(geojsonData => {
+    L.geoJSON(geojsonData, {
+      style: {
+        color: 'black',
+        weight: 1,
+        fillOpacity: 0
+      },
+      onEachFeature: function (feature, layer) {
+        var namaDesa = feature.properties.NAMOBJ || 'Desa Tidak Diketahui';
+        layer.bindPopup(`<strong>${namaDesa}</strong>`);
+      }
+    }).addTo(map);
+  });
+
 // Tile HRSL dari Earth Engine
 var hrsl = L.tileLayer(
   'https://earthengine.googleapis.com/v1/projects/ee-mrgridhoarazzak/maps/64010df46c311212d54025fecb61d2e1-53d18af144c6d5806bc3bb5ed7634ee7/tiles/{z}/{x}/{y}',
